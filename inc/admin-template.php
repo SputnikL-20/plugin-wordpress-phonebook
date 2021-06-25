@@ -1,7 +1,5 @@
 <?php
 namespace inc;
-// session_start();
-
 ?>
 
 <style type="text/css">
@@ -83,8 +81,7 @@ function createPhonebook() {
 <?php	
 }
 
-function searchForm() {
-    
+function searchForm() {  
 ?>
 	<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_search"></form>
 	<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_create"></form>
@@ -104,14 +101,11 @@ function searchForm() {
 			</td>
 		</tr>
 	</table>
-
 <?php
 }
 
-
-
-function adminPhonebook($array = null) {
-
+function adminPhonebook($array = null) 
+{
   if (!empty($array)) {
   ?>
   	<table>

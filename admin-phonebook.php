@@ -32,10 +32,10 @@ if (empty($_POST) && !empty($_SESSION)) {
 } 
 
 if (empty($_POST) && empty($_SESSION)) {
-    adminPhonebook($obj->upload_post_sess(VIEW));
+    adminPhonebook($obj->upload_sess(VIEW));
 }
 
-if (isset($_POST['begin'])) {
+if (isset($_POST['prev'])) {
     adminPhonebook($obj->skipback());
 }
 
@@ -51,7 +51,7 @@ if (isset($_POST['next-pagination'])) {
     adminPhonebook($obj->next());
 }
 
-if (isset($_POST['end'])) {
+if (isset($_POST['next'])) {
     adminPhonebook($obj->skipnext());
 }
 
@@ -61,7 +61,7 @@ if (isset($_POST['ok']) && !empty($_POST['search'])) {
 }
 
 if (isset($_POST['clear'])) { // button 'Очистить' (поиск)
-    adminPhonebook($obj->clear_search());
+    adminPhonebook($obj->viewPagination());
 }
 
 if (isset($_POST['create'])) { // Вызов формы для создания контакта
@@ -75,12 +75,13 @@ if (isset($_POST['insert'])) {
 
 if (isset($_POST['update'])) {
     $obj->press_update();
-    adminPhonebook($obj->clear_search());
+    adminPhonebook($obj->viewPagination());
 }
 
 if (isset($_POST['delete'])) {
     $obj->press_delete();
-    adminPhonebook($obj->arrayPaginotion($_SESSION['index-'.session_id()], $_SESSION['view-'.session_id()]));
+    adminPhonebook($obj->viewPagination());
+    // adminPhonebook($obj->arrayPaginotion($_SESSION['index-'.session_id()], $_SESSION['view-'.session_id()]));
 }
 
 if (isset($_POST['create-table'])) {

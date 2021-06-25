@@ -12,7 +12,6 @@ class Search extends Connect
 
     public function showFindData()
     {
-        // $c = (int) 0;
         $temp = [];
         $field = ['fio', 'otdel', 'position'];
         foreach ($field as $value) {
@@ -29,7 +28,6 @@ class Search extends Connect
             } 
             else {
                 $c ++;
-                // echo $c;
                 if ($c > 2) {
                     exit(NOT_FOUND);
                 }
@@ -40,7 +38,6 @@ class Search extends Connect
 
     public function arrayUniqueKey($array, $key)
     {
-        // print "Проверка связи";
         $tmp = $key_array = array();
         $i = 0;
         foreach ($array as $val) {

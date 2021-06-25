@@ -4,8 +4,8 @@ namespace classes;
 class Dml extends Pagination
 {
 
-    public function __construct()
-    {}
+    // public function __construct()
+    // {}
     
     public function press_insert() 
     {
@@ -17,7 +17,6 @@ class Dml extends Pagination
     {
         $this->deleteData();
         $this->dataPaginator($_SESSION['view-'.session_id()]);
-        $this->formPagination();
     }
     
     public function press_update()
@@ -54,25 +53,29 @@ class Dml extends Pagination
 
     public function insertData()
     {
+        if (!empty($_POST['fio'])) {
         global $wpdb;
-        $wpdb->insert('wp_tel_spravochnik', array( // Вторым параметром у нас идет массив ключей с содержимым:
-            'fio'           => $_POST['fio'],
-            'otdel'         => $_POST['otdel'],
-            'position'      => $_POST['position'],
-            'number'        => $_POST['number'],
-            'small_number'  => $_POST['small_number'],
-            'room'          => $_POST['room'],
-            'address'       => $_POST['address']
-        ), array(
-            '%s',
-            '%s',
-            '%s',
-            '%s',
-            '%s',
-            '%s',
-            '%s'
-        ) // Последним параметром идет фильтр значений: где: %s — строка, %d — число
-        );
+            $wpdb->insert('wp_tel_spravochnik', array( // Вторым параметром у нас идет массив ключей с содержимым:
+                'fio'           => $_POST['fio'],
+                'otdel'         => $_POST['otdel'],
+                'position'      => $_POST['position'],
+                'number'        => $_POST['number'],
+                'small_number'  => $_POST['small_number'],
+                'room'          => $_POST['room'],
+                'address'       => $_POST['address']
+            ), array(
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s'
+            ) // Последним параметром идет фильтр значений: где: %s — строка, %d — число
+            );
+        } else {
+            exit("Поля не должны быть пустыми...");
+        }
     }
 
     public function deleteData()
