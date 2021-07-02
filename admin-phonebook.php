@@ -27,15 +27,19 @@ searchForm();
 
 $obj = new Dml();
 
-if (empty($_POST) && !empty($_SESSION)) { 
+if (empty($_POST) && !empty($_SESSION['view-'.session_id()])) { 
     adminPhonebook($obj->upload_post()); 
+} 
+
+if (empty($_POST) && !isset($_SESSION['index-'.session_id()])) { 
+    adminPhonebook($obj->upload_sess(VIEW)); 
 } 
 
 if (empty($_POST) && empty($_SESSION)) {
     adminPhonebook($obj->upload_sess(VIEW));
 }
 
-if (isset($_POST['prev'])) {
+if (isset($_POST['prev-skip'])) {
     adminPhonebook($obj->skipback());
 }
 
@@ -51,7 +55,7 @@ if (isset($_POST['next-pagination'])) {
     adminPhonebook($obj->next());
 }
 
-if (isset($_POST['next'])) {
+if (isset($_POST['next-skip'])) {
     adminPhonebook($obj->skipnext());
 }
 
@@ -112,10 +116,10 @@ if (isset($_POST['create-table'])) {
 // }
 
 
-// echo "<pre>";
-// print_r($_POST);
-// print_r($_SESSION);
-// echo "</pre>";
+echo "<pre>";
+print_r($_POST);
+print_r($_SESSION);
+echo "</pre>";
 
 
 //    echo "<pre>";
@@ -124,3 +128,24 @@ if (isset($_POST['create-table'])) {
 //    print_r($_sobj->method());
 //    echo "</pre>";
 
+/**
+ * Проверяет роль определенного пользователя.
+ * Возвращает true при совпадении.
+ *
+ * @param строка $role Название роли.
+ * @param логический $user_id (не обязательный) ID пользователя, роль которого нужно проверить.
+ * @return bool
+ */
+// function is_user_role($role, $user_id = null) {
+// $user = is_numeric($user_id) ? get_userdata($user_id) : wp_get_current_user();
+// if (!$user)
+//     return false;
+//     return in_array($role, (array) $user->roles);
+// }
+
+// $user = wp_get_current_user();
+// if (is_user_role('administrator', $user->ID)) {
+//     echo "У вас есть доступ";
+// } else {
+//     echo "У вас нет доступа";
+// }

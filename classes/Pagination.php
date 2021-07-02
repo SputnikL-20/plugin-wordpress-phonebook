@@ -88,7 +88,7 @@ class Pagination extends Connect
 <table style="width: 45%;">
 	<tr>
 		<td style="width: 10%">
-			<button type="submit" name="prev" class="mybtn" 
+			<button type="submit" name="prev-skip" class="mybtn" 
                 <?php $_SESSION['list-'.session_id()] <= (int) 1 ? print("disabled") : '' ?>>
 				<span class="dashicons dashicons-controls-skipback"></span>
 			</button>
@@ -120,7 +120,7 @@ class Pagination extends Connect
 			</button>
 		</td>
 		<td style="width: 10%;">
-			<button type="submit" name="next" class="mybtn"
+			<button type="submit" name="next-skip" class="mybtn"
 				<?php $_SESSION['list-'.session_id()] === (int) ceil($_SESSION['total-'.session_id()] / $_SESSION['view-'.session_id()]) ? print("disabled") : '' ?>>
 				<span class="dashicons dashicons-controls-forward"></span>
 			</button>
