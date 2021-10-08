@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 
 use function classes\Dml\createTable;
 use function classes\Dml\deleteData;
@@ -27,15 +27,19 @@ searchForm();
 
 $obj = new Dml();
 
-if (empty($_POST) && !empty($_SESSION)) { 
+if (empty($_POST) && !empty(get_user_meta( get_current_user_id(), 'count-view', true ))) { 
     adminPhonebook($obj->upload_post()); 
 } 
 
-if (empty($_POST) && empty($_SESSION)) {
-    adminPhonebook($obj->upload_sess(VIEW));
-}
+// if (empty($_POST) && !empty(get_user_meta( get_current_user_id(), 'index', true ))) { 
+//     adminPhonebook($obj->upload_sess(VIEW)); 
+// } 
 
-if (isset($_POST['prev'])) {
+// if (empty($_POST) && empty($_SESSION)) {
+//     adminPhonebook($obj->upload_sess(VIEW));
+// }
+
+if (isset($_POST['prev-skip'])) {
     adminPhonebook($obj->skipback());
 }
 
@@ -44,6 +48,8 @@ if (isset($_POST['prev-pagination'])) {
 }
 
 if (isset($_POST['confirm-count-view'])) {
+    // add_user_meta( get_current_user_id(), 'count-view', $_POST['count-view'], true );
+    update_metadata( 'user', get_current_user_id(), 'count-view', $_POST['count-view'] );
     adminPhonebook($obj->confirm_view());
 }
 
@@ -51,7 +57,7 @@ if (isset($_POST['next-pagination'])) {
     adminPhonebook($obj->next());
 }
 
-if (isset($_POST['next'])) {
+if (isset($_POST['next-skip'])) {
     adminPhonebook($obj->skipnext());
 }
 
@@ -112,10 +118,14 @@ if (isset($_POST['create-table'])) {
 // }
 
 
-// echo "<pre>";
-// print_r($_POST);
+echo "<pre>";
+echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
+echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
+echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
+echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
+print_r($_POST);
 // print_r($_SESSION);
-// echo "</pre>";
+echo "</pre>";
 
 
 //    echo "<pre>";
@@ -124,3 +134,24 @@ if (isset($_POST['create-table'])) {
 //    print_r($_sobj->method());
 //    echo "</pre>";
 
+/**
+ * Проверяет роль определенного пользователя.
+ * Возвращает true при совпадении.
+ *
+ * @param строка $role Название роли.
+ * @param логический $user_id (не обязательный) ID пользователя, роль которого нужно проверить.
+ * @return bool
+ */
+// function is_user_role($role, $user_id = null) {
+// $user = is_numeric($user_id) ? get_userdata($user_id) : wp_get_current_user();
+// if (!$user)
+//     return false;
+//     return in_array($role, (array) $user->roles);
+// }
+
+// $user = wp_get_current_user();
+// if (is_user_role('administrator', $user->ID)) {
+//     echo "У вас есть доступ";
+// } else {
+//     echo "У вас нет доступа";
+// }

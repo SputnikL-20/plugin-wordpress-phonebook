@@ -9,15 +9,15 @@
 
 
 //добавление использования сессий в нашем шаблоне
-add_action( 'init', 'do_session_start' ); 
-function do_session_start() { 
-    if ( !session_id() ) session_start(); 
-}
+// add_action( 'init', 'do_session_start' ); 
+// function do_session_start() { 
+//     if ( !session_id() ) session_start(); 
+// }
 
 // фильтр передает переменную $template - путь до файла шаблона.
 // Изменяя этот путь мы изменяем файл шаблона.
-add_filter( 'template_include', 'my_template' );
-function my_template( $template = null ) 
+add_filter( 'template_include', 'phonebook_template' );
+function phonebook_template( $template = null ) 
 {
 	# шаблон для записи по ID
 	// файл шаблона расположен в папке плагина /my-plugin/site-template.php
@@ -46,10 +46,10 @@ function mfp_Add_My_Admin_Link()
 }
 
 ## Создание таблицы при активации плагина
-register_activation_hook( __FILE__, 'create_table_wp_tel_spravochnik' );
-function create_table_wp_tel_spravochnik() {
+register_activation_hook( __FILE__, 'create_table_tel_spravochnik' );
+function create_table_tel_spravochnik() {
 	global $wpdb;
-	$sql = "CREATE TABLE IF NOT EXISTS `wp_tel_spravochnik`(\n"
+	$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."_tel_spravochnik`(\n"
 	  . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n"
 	  . "    `fio` VARCHAR(150) NOT NULL,\n"
 	  . "    `otdel` VARCHAR(15) NOT NULL,\n"
@@ -58,7 +58,7 @@ function create_table_wp_tel_spravochnik() {
 	  . "    `small_number` VARCHAR(7) DEFAULT NULL,\n"
 	  . "    `room` VARCHAR(15) NOT NULL,\n"
 	  . "    `address` VARCHAR(100) NOT NULL\n"
-	  . ") ENGINE = InnoDB DEFAULT CHARSET = utf8";
+	  . ") {$wpdb -> get_charset_collate()};";
 	$wpdb->query($sql);
 }
 
@@ -69,4 +69,34 @@ function create_table_wp_tel_spravochnik() {
 // 	echo '<span style="color:red">'. wp_basename( $template ) .'</span>';
 
 // 	return $template; 
+// }
+
+
+
+
+// register_activation_hook(__FILE__, 'plg_table_activation');
+// function plg_table_activation()
+// {
+// 	global $wpdb;
+	
+// 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+	
+// 	dbDelta("CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."plg_table_demo` (
+// 		`id` INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+// 		`field_one` VARCHAR(255) NOT NULL,
+// 		`field_two` VARCHAR(255) NOT NULL,
+// 		`date_create` INT(10) UNSIGNED NOT NULL
+// 	) {$wpdb -> get_charset_collate()};");
+	
+// 	return true;
+// };
+
+// register_uninstall_hook(__FILE__, 'plg_table_uninstall');
+// function plg_table_uninstall()
+// {
+// 	global $wpdb;
+	
+// 	$wpdb -> query("DROP TABLE IF EXISTS `" . $wpdb -> prefix . "plg_table_demo`");
+
+// 	return true;
 // }
