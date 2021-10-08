@@ -27,6 +27,7 @@ searchForm();
 
 $obj = new Dml();
 
+
 if (empty($_POST) && !empty(get_user_meta( get_current_user_id(), 'count-view', true ))) { 
     adminPhonebook($obj->upload_post()); 
 } 
@@ -38,6 +39,7 @@ if (empty($_POST) && !empty(get_user_meta( get_current_user_id(), 'count-view', 
 // if (empty($_POST) && empty($_SESSION)) {
 //     adminPhonebook($obj->upload_sess(VIEW));
 // }
+
 
 if (isset($_POST['prev-skip'])) {
     adminPhonebook($obj->skipback());
@@ -117,15 +119,6 @@ if (isset($_POST['create-table'])) {
 //   return $wpdb->get_results($query, ARRAY_A);
 // }
 
-
-echo "<pre>";
-echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
-echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
-echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
-echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
-print_r($_POST);
-// print_r($_SESSION);
-echo "</pre>";
 
 
 //    echo "<pre>";
