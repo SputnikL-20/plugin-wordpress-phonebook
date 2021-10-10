@@ -115,11 +115,7 @@ class Pagination extends Connect
 	<tr>
 		<td style="width: 10%">
 			<button type="submit" name="prev-skip" class="mybtn" 
-
                 <?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
-
-                <?php $_SESSION['list-'.session_id()] <= (int) 1 ? print("disabled") : '' ?>>
-
 				<span class="dashicons dashicons-controls-skipback"></span>
 			</button>
 		</td>
@@ -151,11 +147,7 @@ class Pagination extends Connect
 		</td>
 		<td style="width: 10%;">
 			<button type="submit" name="next-skip" class="mybtn"
-
 				<?php ( (int) get_user_meta( get_current_user_id(), 'list', true ) === (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true ))) ? print("disabled") : '' ?>>
-
-				<?php $_SESSION['list-'.session_id()] === (int) ceil($_SESSION['total-'.session_id()] / $_SESSION['view-'.session_id()]) ? print("disabled") : '' ?>>
-
 				<span class="dashicons dashicons-controls-forward"></span>
 			</button>
 		</td>
