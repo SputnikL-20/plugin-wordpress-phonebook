@@ -3,9 +3,9 @@ namespace view;
 
 use classes\Phonebook;
 
-require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/classes/pagination.php';
-require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/classes/phonebook.php';
-require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/classes/search.php';
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/pagination.php';
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/phonebook.php';
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/search.php';
 
 ?>
 
@@ -101,13 +101,18 @@ button[type=submit] {
 
 $obj = new Phonebook();
 $array = $obj -> getUploadPost();
+echo $obj -> index."<br>";
+echo $obj -> total."<br>";
+echo $obj -> view."<br>";
+echo $obj -> list."<br>";
 
 if (!empty($array)) {
 	if (empty($_POST['search'])) {
 	?>
 	  <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
-	  <table style="width: 45%;">
+	  <table style="width: 50%;">
 	  	<tr>
+	  		<td style="width: 5%; text-align: center; font-weight: bold;"><?= "Elements: " . get_user_meta( get_current_user_id(), 'total', true ); ?></td>
 	  		<td style="width: 10%">
 	  			<button type="submit" name="prev-skip" class="mybtn" 
 	                  <?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
@@ -146,6 +151,7 @@ if (!empty($array)) {
 	  				<span class="dashicons dashicons-controls-forward"></span>
 	  			</button>
 	  		</td>
+	  		
 	  	</tr>
 	  </table>
 	  </form>
@@ -166,13 +172,13 @@ if (!empty($array)) {
 		</tr>	
 	<?php
 	
-	$j = 1; 
+	$j = !empty($_POST['search']) ? 1 : get_user_meta( get_current_user_id(), 'index', true ) + 1; 
     for ($i = 0; $i < count($array); $i++) {
   	?>
   	
   	<tr>
   		<td style="text-align:center;font-weight:bold;">
-  			<?= $j++ ?>
+  			<?= $j++; ?>
   		</td>
   		<td>
   		<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="<?= $i ?>"></form>
@@ -258,10 +264,10 @@ if (!empty($array)) {
 
 <?php
 
-// echo "<pre>";
-// echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
-// echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
-// echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
-// echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
-// print_r($_POST);
-// echo "</pre>";
+echo "<pre>";
+echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
+echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
+echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
+echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
+print_r($_POST);
+echo "</pre>";

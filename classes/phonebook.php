@@ -1,7 +1,7 @@
 <?php
 namespace classes;
 
-require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/classes/dml.php';
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/dml.php';
 
 /**
  * 

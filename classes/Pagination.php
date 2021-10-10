@@ -3,6 +3,10 @@ namespace classes;
 
 class Pagination
 {
+    public $index;
+    public $total;
+    public $view;
+    public $list;
 
     public function upload_post() {
         $args = get_user_meta( get_current_user_id(), 'count-view', true );;
@@ -36,6 +40,10 @@ class Pagination
 
     public function viewPagination() {
         // $this->formPagination();
+        $this -> index = get_user_meta( get_current_user_id(), 'index', true );
+        $this -> total = get_user_meta( get_current_user_id(), 'total', true );
+        $this -> view = get_user_meta( get_current_user_id(), 'count-view', true );
+        $this -> list = get_user_meta( get_current_user_id(), 'list', true );
         return $this->arrayPaginotion( get_user_meta( get_current_user_id(), 'index', true ), get_user_meta( get_current_user_id(), 'count-view', true ) );
     }
     
