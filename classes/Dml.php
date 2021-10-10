@@ -27,7 +27,7 @@ class Dml extends Pagination
     public function updateData()
     {
         global $wpdb;
-        $wpdb->update($wpdb -> prefix.'_tel_spravochnik', array(
+        $wpdb->update($wpdb -> prefix.'tel_spravochnik', array(
             'fio'           => $_POST['fio'],
             'otdel'         => $_POST['otdel'],
             'position'      => $_POST['position'],
@@ -55,7 +55,7 @@ class Dml extends Pagination
     {
         if (!empty($_POST['fio'])) {
         global $wpdb;
-            $wpdb->insert($wpdb -> prefix.'_tel_spravochnik', array( // Вторым параметром у нас идет массив ключей с содержимым:
+            $wpdb->insert($wpdb -> prefix.'tel_spravochnik', array( // Вторым параметром у нас идет массив ключей с содержимым:
                 'fio'           => $_POST['fio'],
                 'otdel'         => $_POST['otdel'],
                 'position'      => $_POST['position'],
@@ -81,7 +81,7 @@ class Dml extends Pagination
     public function deleteData()
     {
         global $wpdb;
-        $wpdb->delete($wpdb -> prefix.'_tel_spravochnik', array(
+        $wpdb->delete($wpdb -> prefix.'tel_spravochnik', array(
             'id'            => $_POST['id']
         ), array(
             '%d'
@@ -91,7 +91,7 @@ class Dml extends Pagination
     public function createTable()
     {
         global $wpdb;
-        $sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."_tel_spravochnik`(\n" 
+        $sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."tel_spravochnik`(\n" 
             . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" 
             . "    `fio` VARCHAR(150) NOT NULL,\n" 
             . "    `otdel` VARCHAR(15) NOT NULL,\n"

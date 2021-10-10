@@ -46,10 +46,10 @@ function mfp_Add_My_Admin_Link()
 }
 
 ## Создание таблицы при активации плагина
-register_activation_hook( __FILE__, 'create_table_tel_spravochnik' );
-function create_table_tel_spravochnik() {
+register_activation_hook( __FILE__, 'create_tabletel_spravochnik' );
+function create_tabletel_spravochnik() {
 	global $wpdb;
-	$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."_tel_spravochnik`(\n"
+	$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."tel_spravochnik`(\n"
 	  . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n"
 	  . "    `fio` VARCHAR(150) NOT NULL,\n"
 	  . "    `otdel` VARCHAR(15) NOT NULL,\n"
@@ -71,7 +71,18 @@ function create_table_tel_spravochnik() {
 // 	return $template; 
 // }
 
+register_activation_hook(__FILE__, 'addDataUsermeta');
 
+function addDataUsermeta()
+{
+    global $wpdb;
+    $result = $wpdb -> get_results("SELECT COUNT(*) AS volume FROM `".$wpdb -> prefix."tel_spravochnik` WHERE 1", ARRAY_A);
+    $volume = $result[0]['volume'];
+    update_metadata( 'user', get_current_user_id(), 'index', 0 );
+    update_metadata( 'user', get_current_user_id(), 'list', 1 );
+    update_metadata( 'user', get_current_user_id(), 'total', $volume );
+    update_metadata( 'user', get_current_user_id(), 'count-view', 10 );
+}
 
 
 // register_activation_hook(__FILE__, 'plg_table_activation');

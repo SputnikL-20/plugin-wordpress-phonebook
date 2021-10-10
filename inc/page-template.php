@@ -12,7 +12,7 @@
 
 <?php
   if (isset($_POST['ok']) && !empty($_POST['search'])) {
-      $array = $wpdb->get_results("SELECT * FROM wp_tel_spravochnik 
+      $array = $wpdb->get_results("SELECT * FROM `".$wpdb -> prefix."tel_spravochnik` 
                                    WHERE `".$_POST['field']."` LIKE '%".$_POST['search']."%'", ARRAY_A);
       if (!empty($array)) {
          foreach ($array as $value) {
@@ -37,14 +37,14 @@
          print("Извените по вашемо запросу ни чего не найдено, попробуйте повторить поиск.");
       }
   } else {
-      $array = $wpdb->get_results("SELECT * FROM wp_tel_spravochnik WHERE 1", ARRAY_A);
+      $array = $wpdb->get_results("SELECT * FROM `".$wpdb -> prefix."tel_spravochnik` WHERE 1", ARRAY_A);
       foreach ($array as $value) {
          $arr[] =  $value['otdel'];
       }
       $arr = array_unique($arr);
       sort($arr); 
       foreach ($arr as $value) {
-        $array = $wpdb->get_results("SELECT * FROM wp_tel_spravochnik WHERE otdel = '".$value."'", ARRAY_A);
+        $array = $wpdb->get_results("SELECT * FROM `".$wpdb -> prefix."tel_spravochnik` WHERE otdel = '".$value."'", ARRAY_A);
         getPhonebook($array);
       }
   } 

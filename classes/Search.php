@@ -17,8 +17,8 @@ class Search extends Connect
         $c = 0;
         $field = ['fio', 'otdel', 'position'];
         foreach ($field as $value) {
-            $array = $this->queryMySql("SELECT * FROM `".$wpdb -> prefix."_tel_spravochnik`
-                            WHERE `".$wpdb -> prefix."_tel_spravochnik`.`" . $value . "` LIKE '%" . $_POST['search'] . "%'");
+            $array = $this->queryMySql("SELECT * FROM `".$wpdb -> prefix."tel_spravochnik`
+                            WHERE `".$wpdb -> prefix."tel_spravochnik`.`" . $value . "` LIKE '%" . $_POST['search'] . "%'");
             if (! empty($array)) {
                 if (count($array) > 1) {
                     for ($i = 0; $i < count($array); $i ++) {

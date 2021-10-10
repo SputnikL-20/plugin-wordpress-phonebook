@@ -1,5 +1,4 @@
 <?php
-// session_start();
 
 use function classes\Dml\createTable;
 use function classes\Dml\deleteData;
@@ -82,6 +81,7 @@ if (isset($_POST['insert'])) {
 if (isset($_POST['update'])) {
     $obj->press_update();
     adminPhonebook($obj->viewPagination());
+    echo "Данные обновлены";
 }
 
 if (isset($_POST['delete'])) {
@@ -96,10 +96,10 @@ if (isset($_POST['create-table'])) {
 }
 
 // Functions //
-// SELECT `wp_tel_spravochnik`.`otdel` FROM `wp_tel_spravochnik` GROUP BY `wp_tel_spravochnik`.`otdel` ORDER BY `wp_tel_spravochnik`.`otdel` ASC 
+// SELECT `".$wpdb -> prefix."tel_spravochnik`.`otdel` FROM `".$wpdb -> prefix."tel_spravochnik` GROUP BY `".$wpdb -> prefix."tel_spravochnik`.`otdel` ORDER BY `".$wpdb -> prefix."tel_spravochnik`.`otdel` ASC 
 // function createTable() {
 //   global $wpdb;
-//   $sql = "CREATE TABLE IF NOT EXISTS `wp_tel_spravochnik`(\n"
+//   $sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."tel_spravochnik`(\n"
 //       . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n"
 //       . "    `fio` VARCHAR(150) NOT NULL,\n"
 //       . "    `otdel` VARCHAR(15) NOT NULL,\n"
@@ -118,16 +118,19 @@ if (isset($_POST['create-table'])) {
 // }
 
 
-echo "<pre>";
-echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
-echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
-echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
-echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
-print_r($_POST);
+// echo "<pre>";
+// echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
+// echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
+// echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
+// echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
+// print_r($_POST);
 // print_r($_SESSION);
-echo "</pre>";
+// echo "</pre>";
 
-
+    // global $wpdb;
+    // $result = $wpdb -> get_results("SELECT COUNT(*) AS volume FROM `".$wpdb -> prefix."tel_spravochnik` WHERE 1", ARRAY_A);
+    // $volume = $result[0]['volume'];
+    // print_r($volume);
 //    echo "<pre>";
 //    print_r($arr['unique']);
 //    print_r(json_decode(json_encode(new Search()), TRUE));

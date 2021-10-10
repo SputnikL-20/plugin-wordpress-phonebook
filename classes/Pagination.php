@@ -4,14 +4,16 @@ require_once 'Connect.php';
 
 class Pagination extends Connect
 {
-    public function upload_sess($args) {
-        update_metadata( 'user', get_current_user_id(), 'index', 0 );
-        update_metadata( 'user', get_current_user_id(), 'list', 1 );
-        $this->dataPaginator($args);   
-        return $this->viewPagination();
-    }
+    private $index;
+    // public function upload_sess($args) {
+    //     update_metadata( 'user', get_current_user_id(), 'index', 0 );
+    //     update_metadata( 'user', get_current_user_id(), 'list', 1 );
+    //     $this->dataPaginator($args);   
+    //     return $this->viewPagination();
+    // }
 
     public function upload_post() {
+
         $args = get_user_meta( get_current_user_id(), 'count-view', true );;
         $this->dataPaginator($args);   
         return $this->viewPagination();       
@@ -19,11 +21,11 @@ class Pagination extends Connect
     
     public function dataPaginator($view) {
         global $wpdb;
-//         if (!$result = $this->queryMySql("SELECT COUNT(*) AS volume FROM `wp_tel_spravochnik` WHERE 1")) {
+//         if (!$result = $this->queryMySql("SELECT COUNT(*) AS volume FROM `".$wpdb -> prefix."tel_spravochnik` WHERE 1")) {
 // /*?*/          createPhonebook();
 //             exit("Справочник не обнаружен");
 //         }
-        $result = $this->queryMySql("SELECT COUNT(*) AS volume FROM `".$wpdb -> prefix."_tel_spravochnik` WHERE 1");
+        $result = $this->queryMySql("SELECT COUNT(*) AS volume FROM `".$wpdb -> prefix."tel_spravochnik` WHERE 1");
         $volume = $result[0]['volume'];
         update_metadata( 'user', get_current_user_id(), 'total', $volume );
 
@@ -53,7 +55,7 @@ class Pagination extends Connect
     
     public function arrayPaginotion($index, $view) { // Список контактов (порция)
         global $wpdb;
-        $queryNotes = $this->queryMySql("SELECT SQL_CALC_FOUND_ROWS * FROM `".$wpdb -> prefix."_tel_spravochnik` LIMIT ".$index.",".$view."");
+        $queryNotes = $this->queryMySql("SELECT SQL_CALC_FOUND_ROWS * FROM `".$wpdb -> prefix."tel_spravochnik` LIMIT ".$index.",".$view."");
         return $queryNotes;
     }
     
