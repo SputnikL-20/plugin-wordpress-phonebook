@@ -1,8 +1,7 @@
 <?php
 namespace classes;
-require_once 'Connect.php';
 
-class Search extends Connect
+class Search
 {
     public $unique;   
 
@@ -17,8 +16,8 @@ class Search extends Connect
         $c = 0;
         $field = ['fio', 'otdel', 'position'];
         foreach ($field as $value) {
-            $array = $this->queryMySql("SELECT * FROM `".$wpdb -> prefix."tel_spravochnik`
-                            WHERE `".$wpdb -> prefix."tel_spravochnik`.`" . $value . "` LIKE '%" . $_POST['search'] . "%'");
+            $array = $wpdb -> get_results("SELECT * FROM `".$wpdb -> prefix."tel_spravochnik`
+                            WHERE `".$wpdb -> prefix."tel_spravochnik`.`" . $value . "` LIKE '%" . $_POST['search'] . "%'", ARRAY_A);
             if (! empty($array)) {
                 if (count($array) > 1) {
                     for ($i = 0; $i < count($array); $i ++) {
@@ -31,7 +30,7 @@ class Search extends Connect
             else {
                 $c ++;
                 if ($c > 2) {
-                    exit(NOT_FOUND);
+                    exit('Извените по вашемо запросу ни чего не найдено, попробуйте повторить поиск.');
                 }
             }
         }

@@ -7,6 +7,11 @@ class Dml extends Pagination
     // public function __construct()
     // {}
     
+    public function press_update()
+    {
+        $this->updateData();
+    }
+
     public function press_insert() 
     {
         $this->insertData();
@@ -17,11 +22,6 @@ class Dml extends Pagination
     {
         $this->deleteData();
         $this->dataPaginator(get_user_meta( get_current_user_id(), 'count-view', true ));
-    }
-    
-    public function press_update()
-    {
-        $this->updateData();
     }
 
     public function updateData()
@@ -88,23 +88,23 @@ class Dml extends Pagination
         ));
     }
 
-    public function createTable()
-    {
-        global $wpdb;
-        $sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."tel_spravochnik`(\n" 
-            . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" 
-            . "    `fio` VARCHAR(150) NOT NULL,\n" 
-            . "    `otdel` VARCHAR(15) NOT NULL,\n"
-            . "    `position` VARCHAR(55) NOT NULL,\n" 
-            . "    `number` VARCHAR(11) DEFAULT NULL,\n" 
-            . "    `small_number` VARCHAR(7) DEFAULT NULL,\n" 
-            . "    `room` VARCHAR(15) NOT NULL,\n" 
-            . "    `address` VARCHAR(100) NOT NULL\n" 
-            . ") ENGINE = InnoDB DEFAULT CHARSET = utf8";
-        $wpdb->query($sql);
-    }
+    // public function createTable()
+    // {
+    //     global $wpdb;
+    //     $sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."tel_spravochnik`(\n" 
+    //         . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" 
+    //         . "    `fio` VARCHAR(150) NOT NULL,\n" 
+    //         . "    `otdel` VARCHAR(15) NOT NULL,\n"
+    //         . "    `position` VARCHAR(55) NOT NULL,\n" 
+    //         . "    `number` VARCHAR(11) DEFAULT NULL,\n" 
+    //         . "    `small_number` VARCHAR(7) DEFAULT NULL,\n" 
+    //         . "    `room` VARCHAR(15) NOT NULL,\n" 
+    //         . "    `address` VARCHAR(100) NOT NULL\n" 
+    //         . ") ENGINE = InnoDB DEFAULT CHARSET = utf8";
+    //     $wpdb->query($sql);
+    // }
 
-    function __destruct()
-    {}
+    // function __destruct()
+    // {}
 }
 

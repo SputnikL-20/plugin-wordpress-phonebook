@@ -1,5 +1,12 @@
-<?php
-namespace inc;
+<?php 
+namespace view; 
+
+use classes\Phonebook;
+
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/classes/pagination.php';
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/classes/phonebook.php';
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/classes/search.php';
+
 ?>
 
 <style type="text/css">
@@ -68,21 +75,10 @@ button[type=submit] {
   -webkit-transition: all .3s linear;
   -moz-transition: all .3s linear; 
 }
-
 </style>
 
-<?php
-
-function createPhonebook() {
-?>
-	<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_table">
-		<button style="width: 100%" type="submit" name="create-table" form="f_table">Создать справочник</button>
-	</form>
-<?php	
-}
-
-function searchForm() {  
-?>
+<div class="wrap">
+	<h3>Редактор телефонного справочника</h3>
 	<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_search"></form>
 	<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_create"></form>
 	<table>
@@ -102,11 +98,59 @@ function searchForm() {
 		</tr>
 	</table>
 <?php
-}
 
-function adminPhonebook($array = null) 
-{
-  if (!empty($array)) {
+$obj = new Phonebook();
+$array = $obj -> getUploadPost();
+
+if (!empty($array)) {
+	if (empty($_POST['search'])) {
+	?>
+	  <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
+	  <table style="width: 45%;">
+	  	<tr>
+	  		<td style="width: 10%">
+	  			<button type="submit" name="prev-skip" class="mybtn" 
+	                  <?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
+	  				<span class="dashicons dashicons-controls-skipback"></span>
+	  			</button>
+	  		</td>
+	  		<td style="width: 5%">
+	  			<button type="submit" name="prev-pagination" class="mybtn"
+	  				<?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
+	  				<span class="dashicons dashicons-controls-back"></span>
+	  			</button>
+	  		</td>
+	  		<td style="width: 6%; text-align: center; font-weight: bold;">View:</td>
+	  		<td style="width: 7%"><input type="number" min="1" name="count-view"
+	  			value="<?= get_user_meta( get_current_user_id(), 'count-view', true ); ?>" />
+	          </td>
+	  		<td style="width: 5%">
+	  			<button type="submit" name="confirm-count-view" class="mybtn" 
+	                  <?php get_user_meta( get_current_user_id(), 'total', true ) == 0 ? print("disabled") : '' ?>>
+	                  <span class="dashicons dashicons-editor-break"></span>
+	  			</button>
+	  		</td>
+	  		<td style="width: 8%; text-align: center; font-weight: bold;"><?= "List: " ?>
+	              <?= get_user_meta( get_current_user_id(), 'list', true ) ?><?= " of " ?>
+	              <?= (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true )) ?>
+	          </td>
+	  		<td style="width: 5%;">
+	  			<button type="submit" name="next-pagination" class="mybtn"
+	  				<?php ( (int) get_user_meta( get_current_user_id(), 'list', true ) === (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true ))) ? print("disabled") : '' ?>>
+	  				<span class="dashicons dashicons-controls-play"></span>
+	  			</button>
+	  		</td>
+	  		<td style="width: 10%;">
+	  			<button type="submit" name="next-skip" class="mybtn"
+	  				<?php ( (int) get_user_meta( get_current_user_id(), 'list', true ) === (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true ))) ? print("disabled") : '' ?>>
+	  				<span class="dashicons dashicons-controls-forward"></span>
+	  			</button>
+	  		</td>
+	  	</tr>
+	  </table>
+	  </form>
+	<?php
+	 } 
   ?>
   	<table>
 		<tr>
@@ -121,6 +165,7 @@ function adminPhonebook($array = null)
 			<th colspan="2" style="width: 5%">Обновить / Удалить</th>
 		</tr>	
 	<?php
+	
 	$j = 1; 
     for ($i = 0; $i < count($array); $i++) {
   	?>
@@ -168,9 +213,7 @@ function adminPhonebook($array = null)
   	</tr>
   <?php } ?>
   	</table>
-  	<?php 
-  } else {
-  ?>
+  <?php } else { ?>
   <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_add"></form>
 	<table>
 		<tr>
@@ -210,6 +253,15 @@ function adminPhonebook($array = null)
 			</td>
 		</tr>  
     </table>  
-    <?php
-  }
-}
+    <?php } ?>
+</div>
+
+<?php
+
+// echo "<pre>";
+// echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
+// echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
+// echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
+// echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
+// print_r($_POST);
+// echo "</pre>";

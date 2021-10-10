@@ -1,9 +1,9 @@
 <?php
 /*
  * Plugin Name: Phonebook
- * Description: OOP
+ * Description: Телефонный справочник в виде плагина WORDPRESS
  * Author:      Голиков Сергей Сергеевич
- * Version:     Версия плагина 1.1
+ * Version:     Версия плагина 1.2
  *
  */
 
@@ -23,7 +23,7 @@ function phonebook_template( $template = null )
 	// файл шаблона расположен в папке плагина /my-plugin/site-template.php
 	// global $post;
 	if( is_page('spravochnik') ){
-		return wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/inc/page-template.php';
+		return wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress_phonebook/view/page-template.php';
 	}
 	return $template;
 }
@@ -41,7 +41,7 @@ function mfp_Add_My_Admin_Link()
 	add_menu_page('Edit Phonebook', // Название страниц (Title)
 				  'Phonebook', // Текст ссылки в меню
  				  'manage_options', // Требование к возможности видеть ссылку
- 				  'plugin-wordpress_phonebook/admin-phonebook.php' // 'slug' - файл отобразится по нажатию на ссылку
+ 				  'plugin-wordpress_phonebook/view/admin-template.php' // 'slug' - файл отобразится по нажатию на ссылку
  				 );
 }
 
@@ -71,8 +71,8 @@ function create_tabletel_spravochnik() {
 // 	return $template; 
 // }
 
+// Добавление метаданных пользователю для навигации по справочнику
 register_activation_hook(__FILE__, 'addDataUsermeta');
-
 function addDataUsermeta()
 {
     global $wpdb;
