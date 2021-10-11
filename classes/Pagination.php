@@ -39,17 +39,16 @@ class Pagination
     }
 
     public function viewPagination() {
-        // $this->formPagination();
         $this -> index = get_user_meta( get_current_user_id(), 'index', true );
         $this -> total = get_user_meta( get_current_user_id(), 'total', true );
-        $this -> view = get_user_meta( get_current_user_id(), 'count-view', true );
-        $this -> list = get_user_meta( get_current_user_id(), 'list', true );
-        return $this->arrayPaginotion( get_user_meta( get_current_user_id(), 'index', true ), get_user_meta( get_current_user_id(), 'count-view', true ) );
+        $this -> view  = get_user_meta( get_current_user_id(), 'count-view', true );
+        $this -> list  = get_user_meta( get_current_user_id(), 'list', true );
+        return $this->arrayPaginotion( $this -> index, $this -> view );
     }
     
     public function arrayPaginotion($index, $view) { // Список контактов (порция)
         global $wpdb;
-        $queryNotes = $wpdb -> get_results("SELECT SQL_CALC_FOUND_ROWS * FROM `".$wpdb -> prefix."tel_spravochnik` LIMIT ".$index.",".$view."", ARRAY_A);
+        $queryNotes = $wpdb -> get_results("SELECT SQL_CALC_FOUND_ROWS * FROM `".$wpdb -> prefix."tel_spravochnik` LIMIT " . $index . "," . $view . "", ARRAY_A);
         return $queryNotes;
     }
     
@@ -103,7 +102,7 @@ class Pagination
         return $this->viewPagination();
     }
 
-    function __destruct()
-    {}
+    // function __destruct()
+    // {}
 }
 

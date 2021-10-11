@@ -1,3 +1,30 @@
+<?php
+namespace view;
+
+use classes\Dml;
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/dml.php';
+
+if ($_SERVER['HTTP_REFERER'] === $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'/wp-admin/admin.php?page=admin-template') {
+
+    header("Content-type: text/csv"); 
+    header("Content-Disposition: attachment; filename=file.csv"); 
+    header("Pragma: no-cache"); 
+    header("Expires: 0"); 
+
+    $obj = new Dml;
+    $unloading = $obj -> downloadData();
+
+    $buffer = fopen('php://output', 'w'); 
+    fputs($buffer, chr(0xEF) . chr(0xBB) . chr(0xBF));
+    for ($i = 0; $i < count($unloading); $i++) { 
+        fputcsv($buffer, $unloading[$i], ','); 
+    }
+    fclose($buffer); 
+    exit();
+}
+?>
+
+
 <div class="wrap">
   <br>
   <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_search"></form>
@@ -86,7 +113,7 @@ function getPhonebook($array)
   get_footer();
 // echo "<pre>";
 // print_r($_POST);
-// print_r($_SESSION);
+// print_r($_SERVER);
 // echo "</pre>";
 
 ?>

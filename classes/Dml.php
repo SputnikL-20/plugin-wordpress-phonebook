@@ -1,6 +1,8 @@
 <?php
 namespace classes;
 
+require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/pagination.php';
+
 class Dml extends Pagination
 {
 
@@ -88,21 +90,12 @@ class Dml extends Pagination
         ));
     }
 
-    // public function createTable()
-    // {
-    //     global $wpdb;
-    //     $sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."tel_spravochnik`(\n" 
-    //         . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" 
-    //         . "    `fio` VARCHAR(150) NOT NULL,\n" 
-    //         . "    `otdel` VARCHAR(15) NOT NULL,\n"
-    //         . "    `position` VARCHAR(55) NOT NULL,\n" 
-    //         . "    `number` VARCHAR(11) DEFAULT NULL,\n" 
-    //         . "    `small_number` VARCHAR(7) DEFAULT NULL,\n" 
-    //         . "    `room` VARCHAR(15) NOT NULL,\n" 
-    //         . "    `address` VARCHAR(100) NOT NULL\n" 
-    //         . ") ENGINE = InnoDB DEFAULT CHARSET = utf8";
-    //     $wpdb->query($sql);
-    // }
+    public function downloadData()
+    {
+        global $wpdb;
+        $result = $wpdb -> get_results("SELECT * FROM `".$wpdb -> prefix."tel_spravochnik` ORDER BY `fio` ASC", ARRAY_A);
+        return $result;
+    }
 
     // function __destruct()
     // {}

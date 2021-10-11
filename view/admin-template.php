@@ -26,7 +26,8 @@ input[type=text], [type=search] {
 input[type=number] {
 	/*padding: 2pt 2pt 2pt 2pt;*/
   /*border: none;*/
-	margin: 0 auto;
+	margin: 0pt 0pt 0.5pt 0pt;
+	/*margin: 0 auto;*/
     width:100%;
 }
 button[type=submit] {
@@ -79,8 +80,8 @@ button[type=submit] {
 
 <div class="wrap">
 	<h3>Редактор телефонного справочника</h3>
-	<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_search"></form>
-	<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_create"></form>
+	<form method="POST" id="f_search"></form>
+	<form method="POST" id="f_create"></form>
 	<table>
 		<tr>
 			<td>
@@ -100,60 +101,75 @@ button[type=submit] {
 <?php
 
 $obj = new Phonebook();
-$array = $obj -> getUploadPost();
-echo $obj -> index."<br>";
-echo $obj -> total."<br>";
-echo $obj -> view."<br>";
-echo $obj -> list."<br>";
+$array = $obj -> getActionPost();
 
 if (!empty($array)) {
 	if (empty($_POST['search'])) {
 	?>
-	  <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
-	  <table style="width: 50%;">
+	  <form method="POST">
+	  <table style="width: 50%;float: left;">
 	  	<tr>
-	  		<td style="width: 5%; text-align: center; font-weight: bold;"><?= "Elements: " . get_user_meta( get_current_user_id(), 'total', true ); ?></td>
-	  		<td style="width: 10%">
+	  		<td style="width: 6%; text-align: center; font-weight: bold;">
+	  			<?= "Elements: " . $obj -> total; ?>
+	  		</td>
+	  		<td style="width: 8%">
 	  			<button type="submit" name="prev-skip" class="mybtn" 
-	                  <?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
+	          <?php $obj -> list <= (int) 1 ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-skipback"></span>
 	  			</button>
 	  		</td>
 	  		<td style="width: 5%">
 	  			<button type="submit" name="prev-pagination" class="mybtn"
-	  				<?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
+	  				<?php $obj -> list <= (int) 1 ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-back"></span>
 	  			</button>
 	  		</td>
 	  		<td style="width: 6%; text-align: center; font-weight: bold;">View:</td>
-	  		<td style="width: 7%"><input type="number" min="1" name="count-view"
-	  			value="<?= get_user_meta( get_current_user_id(), 'count-view', true ); ?>" />
+	  		<td style="width: 5%"><input type="number" min="1" name="count-view"
+	  			value="<?= $obj -> view; ?>" />
 	          </td>
-	  		<td style="width: 5%">
+	  		<td style="width: 3%">
 	  			<button type="submit" name="confirm-count-view" class="mybtn" 
-	                  <?php get_user_meta( get_current_user_id(), 'total', true ) == 0 ? print("disabled") : '' ?>>
-	                  <span class="dashicons dashicons-editor-break"></span>
+            <?php $obj -> total == 0 ? print("disabled") : '' ?>>
+            <span class="dashicons dashicons-editor-break"></span>
 	  			</button>
 	  		</td>
-	  		<td style="width: 8%; text-align: center; font-weight: bold;"><?= "List: " ?>
-	              <?= get_user_meta( get_current_user_id(), 'list', true ) ?><?= " of " ?>
-	              <?= (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true )) ?>
-	          </td>
+	  		<td style="width: 6%; text-align: center; font-weight: bold;">
+            <?= "List: " . $obj -> list . " of " . (int) ceil($obj -> total / $obj -> view) ?>
+	      </td>
 	  		<td style="width: 5%;">
 	  			<button type="submit" name="next-pagination" class="mybtn"
-	  				<?php ( (int) get_user_meta( get_current_user_id(), 'list', true ) === (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true ))) ? print("disabled") : '' ?>>
+	  				<?php ( (int) $obj -> list === (int) ceil($obj -> total / $obj -> view)) ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-play"></span>
 	  			</button>
 	  		</td>
-	  		<td style="width: 10%;">
+	  		<td style="width: 8%;">
 	  			<button type="submit" name="next-skip" class="mybtn"
-	  				<?php ( (int) get_user_meta( get_current_user_id(), 'list', true ) === (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true ))) ? print("disabled") : '' ?>>
+	  				<?php ((int) $obj -> list === (int) ceil($obj -> total / $obj -> view)) ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-forward"></span>
 	  			</button>
 	  		</td>
-	  		
 	  	</tr>
 	  </table>
+	  </form>
+	  <form enctype="multipart/form-data" method="POST">
+	  	<table style="width: 50%;">
+	  		<tr style="float: right;">
+		  		<td>
+		  			<input type="file" name="file-csv" accept=".csv" />
+		  		</td>
+		  		<td>
+		  			<button type="submit" name="upload" class="mybtn" title="upload">
+		  				<span class="dashicons dashicons-upload"></span>
+		  			</button>
+		  		</td>
+		  		<td>
+		  			<button type="submit" name="download" class="mybtn" title="download">
+		  				<span class="dashicons dashicons-download"></span>
+		  			</button>
+		  		</td>
+	  		</tr>
+	  	</table>
 	  </form>
 	<?php
 	 } 
@@ -172,7 +188,7 @@ if (!empty($array)) {
 		</tr>	
 	<?php
 	
-	$j = !empty($_POST['search']) ? 1 : get_user_meta( get_current_user_id(), 'index', true ) + 1; 
+	$j = !empty($_POST['search']) ? 1 : $obj -> index + 1; 
     for ($i = 0; $i < count($array); $i++) {
   	?>
   	
@@ -181,7 +197,7 @@ if (!empty($array)) {
   			<?= $j++; ?>
   		</td>
   		<td>
-  		<form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="<?= $i ?>"></form>
+  		<form method="POST" id="<?= $i ?>"></form>
   			<input type="hidden" name="id" form="<?= $i ?>" value="<?= $array[$i]['id'] ?>" />
   			<input type="text" name="fio" form="<?= $i ?>" 
   					placeholder="ФИО" title="<?= $array[$i]['fio'] ?>" value="<?= $array[$i]['fio'] ?>" />
@@ -220,7 +236,7 @@ if (!empty($array)) {
   <?php } ?>
   	</table>
   <?php } else { ?>
-  <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_add"></form>
+  <form method="POST" id="f_add"></form>
 	<table>
 		<tr>
 			<th>ФИО</th>
@@ -264,10 +280,19 @@ if (!empty($array)) {
 
 <?php
 
-echo "<pre>";
-echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
-echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
-echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
-echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
-print_r($_POST);
-echo "</pre>";
+if (isset($_POST['download'])) {
+	echo "<script> window.location='spravochnik'; </script> ";
+}
+
+
+// echo "<pre>";
+// echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
+// echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
+// echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
+// echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
+// print_r($_POST);
+// print_r($_FILES);
+// echo "</pre>";
+
+
+

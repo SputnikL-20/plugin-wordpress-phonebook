@@ -8,46 +8,54 @@
  */
 
 
-//добавление использования сессий в нашем шаблоне
-// add_action( 'init', 'do_session_start' ); 
-// function do_session_start() { 
-//     if ( !session_id() ) session_start(); 
-// }
-
 // фильтр передает переменную $template - путь до файла шаблона.
 // Изменяя этот путь мы изменяем файл шаблона.
-add_filter( 'template_include', 'phonebook_template' );
-function phonebook_template( $template = null ) 
+add_filter( 'template_include', 'phonebook_site_template' );
+function phonebook_site_template( $template = null ) 
 {
 	# шаблон для записи по ID
-	// файл шаблона расположен в папке плагина /my-plugin/site-template.php
-	// global $post;
+	// файл шаблона расположен в папке плагина /plugin-wordpress-phonebook/view/page-template.php
 	if( is_page('spravochnik') ){
 		return wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/view/page-template.php';
+	}
+	if( is_page('inc-template') ){
+		return wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/view/inc-template.php';
 	}
 	return $template;
 }
 
+// add_action('init', 'do_output_buffer');
+// function do_output_buffer() {
+//         ob_start();
+// }
 
-/*
+/**
  * Добавляем новое меню в Админ Консоль
  */
- 
-// Хук событие 'admin_menu', запуск функции 'mfp_Add_My_Admin_Link()'
-add_action( 'admin_menu', 'mfp_Add_My_Admin_Link' );
+
+// Хук событие 'admin_menu', запуск функции 'fun_reg_admin_menu_phonebook()'
+add_action( 'admin_menu', 'fun_reg_admin_menu_phonebook' );
 // Добавляем новую ссылку в меню Админ Консоли
-function mfp_Add_My_Admin_Link()
+function fun_reg_admin_menu_phonebook()
 {
 	add_menu_page('Edit Phonebook', // Название страниц (Title)
 				  'Phonebook', // Текст ссылки в меню
- 				  'manage_options', // Требование к возможности видеть ссылку
- 				  'plugin-wordpress-phonebook/view/admin-template.php' // 'slug' - файл отобразится по нажатию на ссылку
+ 				  'manage_options', // права пользователя, необходимые для доступа к странице
+ 				  'admin-template', // 'slug' - файл отобразится по нажатию на ссылку
+ 				  'page_admin_template', // функция, которая выводит содержимое страницы
+ 				  'dashicons-phone' // иконка, в данном случае из Dashicons
  				 );
 }
 
-## Создание таблицы при активации плагина
-register_activation_hook( __FILE__, 'create_tabletel_spravochnik' );
-function create_tabletel_spravochnik() {
+function page_admin_template() {
+	include wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/view/admin-template.php';
+}
+
+/**
+ * Создание таблицы при активации плагина
+ */ 
+register_activation_hook( __FILE__, 'create_table_tel_spravochnik' );
+function create_table_tel_spravochnik() {
 	global $wpdb;
 	$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb -> prefix."tel_spravochnik`(\n"
 	  . "    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,\n"
@@ -71,8 +79,10 @@ function create_tabletel_spravochnik() {
 // 	return $template; 
 // }
 
-// Добавление метаданных пользователю для навигации по справочнику
-register_activation_hook(__FILE__, 'addDataUsermeta');
+/**
+ * Добавление метаданных пользователю для навигации по справочнику
+ */ 
+register_activation_hook( __FILE__, 'addDataUsermeta' );
 function addDataUsermeta()
 {
     global $wpdb;
