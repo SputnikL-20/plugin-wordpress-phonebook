@@ -7,7 +7,7 @@ require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/c
 if ($_SERVER['HTTP_REFERER'] === $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'/wp-admin/admin.php?page=admin-template') {
 
     header("Content-type: text/csv"); 
-    header("Content-Disposition: attachment; filename=file.csv"); 
+    header("Content-Disposition: attachment; filename=Phonebook.csv"); 
     header("Pragma: no-cache"); 
     header("Expires: 0"); 
 
@@ -27,7 +27,7 @@ if ($_SERVER['HTTP_REFERER'] === $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERV
 
 <div class="wrap">
   <br>
-  <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST" id="f_search"></form>
+  <form method="POST" id="f_search"></form>
         <select name="field" form="f_search">
            <option selected value="otdel">Отдел</option>
            <option value="position">Должность</option>

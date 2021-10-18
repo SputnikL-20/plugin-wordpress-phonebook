@@ -43,7 +43,9 @@ class Phonebook extends Dml
 
         if (isset($_POST['ok']) && !empty($_POST['search'])) {
             $arr = (array) new Search();
-            return array_values($arr['unique']);
+            if (!empty(array_values($arr['unique']))) {
+                return array_values($arr['unique']);
+            }
         }
 
         if (isset($_POST['clear'])) { // button 'Очистить' (поиск)
@@ -70,22 +72,25 @@ class Phonebook extends Dml
         }
 
         if (isset($_POST['upload'])) {
-            if (($handle = fopen($_FILES['file-csv']['tmp_name'], "r")) !== FALSE) {
-                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                    for ($c = 1; $c < count($data); $c++) {
-                        $_POST['fio']          = $data[$c];
-                        $_POST['otdel']        = $data[++$c];
-                        $_POST['position']     = $data[++$c];
-                        $_POST['number']       = $data[++$c];
-                        $_POST['small_number'] = $data[++$c];
-                        $_POST['room']         = $data[++$c];
-                        $_POST['address']      = $data[++$c];
+            if (file_exists($_FILES['file-csv']['tmp_name'])) {
+                if (($handle = fopen($_FILES['file-csv']['tmp_name'], "r")) !== FALSE) {
+                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                        for ($c = 1; $c < count($data); $c++) {
+                            $_POST['fio']          = $data[$c];
+                            $_POST['otdel']        = $data[++$c];
+                            $_POST['position']     = $data[++$c];
+                            $_POST['number']       = $data[++$c];
+                            $_POST['small_number'] = $data[++$c];
+                            $_POST['room']         = $data[++$c];
+                            $_POST['address']      = $data[++$c];
+                        }
+                        $this -> insertData();
                     }
-                    $this -> insertData();
+                    fclose($handle);
                 }
-                fclose($handle);
-            }
-            return $this -> upload_post(); 
+                return $this -> upload_post(); 
+            }   
+            echo 'Невозможно открыть CSV-файл!';            
         }
 
         if (isset($_POST['download'])) {

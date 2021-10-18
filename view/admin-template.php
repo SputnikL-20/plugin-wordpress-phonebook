@@ -6,7 +6,6 @@ use classes\Phonebook;
 require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/pagination.php';
 require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/phonebook.php';
 require_once wp_normalize_path( WP_PLUGIN_DIR ) . '/plugin-wordpress-phonebook/classes/search.php';
-
 ?>
 
 <style type="text/css">
@@ -79,7 +78,32 @@ button[type=submit] {
 </style>
 
 <div class="wrap">
-	<h3>Редактор телефонного справочника</h3>
+	<h1>Редактор телефонного справочника</h1>
+	  <form enctype="multipart/form-data" method="POST">
+	  	<table style="width: 100%;">
+	  		<tr>
+		  		<td style="width: 70%;font-family:'Lucida Console', Consolas, monospace;font-size:10pt;padding-left: 7.5pt;">
+		  			<?php 
+		  				isset($_POST['download']) ? print('Данные успешно выгружены') : null;
+		  				// isset($_POST['upload']) ? print('Данные успешно обновлены') : null;
+		  			 ?>
+		  		</td>
+		  		<td style="margin: 0 auto;float: right;">
+		  			<input type="file" name="file-csv" accept=".csv" />
+		  		</td>
+		  		<td>
+		  			<button type="submit" name="upload" class="mybtn" title="upload csv">
+		  				<span class="dashicons dashicons-upload"></span>
+		  			</button>
+		  		</td>
+		  		<td>
+		  			<button type="submit" name="download" class="mybtn" title="download csv">
+		  				<span class="dashicons dashicons-download"></span>
+		  			</button>
+		  		</td>
+	  		</tr>
+	  	</table>
+	  </form>
 	<form method="POST" id="f_search"></form>
 	<form method="POST" id="f_create"></form>
 	<table>
@@ -88,13 +112,13 @@ button[type=submit] {
 				<input type="search" name="search" form="f_search" placeholder="Поиск по справочнику" />
 			</td>
 			<td style="width: 10%">
-				<button type="submit" name="ok" form="f_search"><span class="dashicons dashicons-search"></span></button>
+				<button type="submit" name="ok" form="f_search" title="Search"><span class="dashicons dashicons-search"></span></button>
 			</td>
 			<td style="width: 10%">
-				<button type="submit" name="clear" form="f_search"><span class="dashicons dashicons-editor-justify"></span></button>
+				<button type="submit" name="clear" form="f_search" title="Reference book"><span class="dashicons dashicons-editor-justify"></span></button>
 			</td>
 			<td style="width: 10%">
-				<button type="submit" name="create" form="f_create"><span class="dashicons dashicons-plus-alt"></span></button>
+				<button type="submit" name="create" form="f_create" title="Create"><span class="dashicons dashicons-plus-alt"></span></button>
 			</td>
 		</tr>
 	</table>
@@ -110,66 +134,47 @@ if (!empty($array)) {
 	  <table style="width: 50%;float: left;">
 	  	<tr>
 	  		<td style="width: 6%; text-align: center; font-weight: bold;">
-	  			<?= "Elements: " . $obj -> total; ?>
+	  			<?= "Elements: " . get_user_meta( get_current_user_id(), 'total', true ); ?>
 	  		</td>
 	  		<td style="width: 8%">
 	  			<button type="submit" name="prev-skip" class="mybtn" 
-	          <?php $obj -> list <= (int) 1 ? print("disabled") : '' ?>>
+	          <?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-skipback"></span>
 	  			</button>
 	  		</td>
 	  		<td style="width: 5%">
 	  			<button type="submit" name="prev-pagination" class="mybtn"
-	  				<?php $obj -> list <= (int) 1 ? print("disabled") : '' ?>>
+	  				<?php get_user_meta( get_current_user_id(), 'list', true ) <= (int) 1 ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-back"></span>
 	  			</button>
 	  		</td>
 	  		<td style="width: 6%; text-align: center; font-weight: bold;">View:</td>
 	  		<td style="width: 5%"><input type="number" min="1" name="count-view"
-	  			value="<?= $obj -> view; ?>" />
+	  			value="<?= get_user_meta( get_current_user_id(), 'count-view', true ); ?>" />
 	          </td>
 	  		<td style="width: 3%">
 	  			<button type="submit" name="confirm-count-view" class="mybtn" 
-            <?php $obj -> total == 0 ? print("disabled") : '' ?>>
+            <?php get_user_meta( get_current_user_id(), 'total', true ) == 0 ? print("disabled") : '' ?>>
             <span class="dashicons dashicons-editor-break"></span>
 	  			</button>
 	  		</td>
 	  		<td style="width: 6%; text-align: center; font-weight: bold;">
-            <?= "List: " . $obj -> list . " of " . (int) ceil($obj -> total / $obj -> view) ?>
+            <?= "List: " . get_user_meta( get_current_user_id(), 'list', true ) . " of " . (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true )) ?>
 	      </td>
 	  		<td style="width: 5%;">
 	  			<button type="submit" name="next-pagination" class="mybtn"
-	  				<?php ( (int) $obj -> list === (int) ceil($obj -> total / $obj -> view)) ? print("disabled") : '' ?>>
+	  				<?php ( (int) get_user_meta( get_current_user_id(), 'list', true ) === (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true ))) ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-play"></span>
 	  			</button>
 	  		</td>
 	  		<td style="width: 8%;">
 	  			<button type="submit" name="next-skip" class="mybtn"
-	  				<?php ((int) $obj -> list === (int) ceil($obj -> total / $obj -> view)) ? print("disabled") : '' ?>>
+	  				<?php ((int) get_user_meta( get_current_user_id(), 'list', true ) === (int) ceil(get_user_meta( get_current_user_id(), 'total', true ) / get_user_meta( get_current_user_id(), 'count-view', true ))) ? print("disabled") : '' ?>>
 	  				<span class="dashicons dashicons-controls-forward"></span>
 	  			</button>
 	  		</td>
 	  	</tr>
 	  </table>
-	  </form>
-	  <form enctype="multipart/form-data" method="POST">
-	  	<table style="width: 50%;">
-	  		<tr style="float: right;">
-		  		<td>
-		  			<input type="file" name="file-csv" accept=".csv" />
-		  		</td>
-		  		<td>
-		  			<button type="submit" name="upload" class="mybtn" title="upload">
-		  				<span class="dashicons dashicons-upload"></span>
-		  			</button>
-		  		</td>
-		  		<td>
-		  			<button type="submit" name="download" class="mybtn" title="download">
-		  				<span class="dashicons dashicons-download"></span>
-		  			</button>
-		  		</td>
-	  		</tr>
-	  	</table>
 	  </form>
 	<?php
 	 } 
@@ -279,20 +284,22 @@ if (!empty($array)) {
 </div>
 
 <?php
-
 if (isset($_POST['download'])) {
 	echo "<script> window.location='spravochnik'; </script> ";
 }
 
-
-// echo "<pre>";
+echo "<pre>";
 // echo "index - " . get_user_meta( get_current_user_id(), 'index', true ) . "<br>";
 // echo "total - " . get_user_meta( get_current_user_id(), 'total', true ) . "<br>";
 // echo "count-view - " . get_user_meta( get_current_user_id(), 'count-view', true ) . "<br>";
 // echo "list - " . get_user_meta( get_current_user_id(), 'list', true ) . "<br>";
-// print_r($_POST);
+echo $obj -> index. "<br>";
+echo $obj -> list. "<br>";
+echo $obj -> total. "<br>";
+echo $obj -> view. "<br>";
+print_r($_POST);
 // print_r($_FILES);
-// echo "</pre>";
+echo "</pre>";
 
 
 
